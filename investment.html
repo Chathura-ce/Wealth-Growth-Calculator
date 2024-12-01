@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wealth Growth Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Wealth Growth Calculator</h1>
+        <label for="initialSavings">Initial Savings (LKR):</label>
+        <input type="number" id="initialSavings" value="100000">
+
+        <label for="monthlyAddition">Monthly Addition (LKR):</label>
+        <input type="number" id="monthlyAddition" value="10000">
+
+        <label for="annualInterest">Annual Interest Rate (%):</label>
+        <input type="number" id="annualInterest" value="5">
+
+        <label for="annualInflation">Annual Inflation Rate (%):</label>
+        <input type="number" id="annualInflation" value="8">
+
+        <label for="years">Number of Years:</label>
+        <input type="number" id="years" value="30">
+
+        <button onclick="calculateWealth()">Calculate</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Future Value (LKR)</th>
+                    <th>Real Value (LKR)</th>
+                </tr>
+            </thead>
+            <tbody id="results"></tbody>
+        </table>
+    </div>
+
+    <script>
+        function calculateWealth() {
+            const initialSavings = parseFloat(document.getElementById('initialSavings').value);
+            const monthlyAddition = parseFloat(document.getElementById('monthlyAddition').value);
+            const annualInterest = parseFloat(document.getElementById('annualInterest').value) / 100;
+            const annualInflation = parseFloat(document.getElementById('annualInflation').value) / 100;
+            const years = parseInt(document.getElementById('years').value);
+
+            let wealth = initialSavings;
+            let results = "";
+            const monthlyRate = annualInterest / 12;
+
+            for (let year = 1; year <= years; year++) {
+                for (let month = 1; month <= 12; month++) {
+                    wealth = wealth * (1 + monthlyRate) + monthlyAddition;
+                }
+                const inflationAdjustedWealth = wealth / Math.pow(1 + annualInflation, year);
+                results += `
+                    <tr>
+                        <td>${year}</td>
+                        <td>${wealth.toFixed(2)}</td>
+                        <td>${inflationAdjustedWealth.toFixed(2)}</td>
+                    </tr>`;
+            }
+
+            document.getElementById('results').innerHTML = results;
+        }
+    </script>
+</body>
+</html>
